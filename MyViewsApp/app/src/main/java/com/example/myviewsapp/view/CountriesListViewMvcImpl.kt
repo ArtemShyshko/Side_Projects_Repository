@@ -10,11 +10,16 @@ import androidx.recyclerview.widget.RecyclerView
 import androidx.swiperefreshlayout.widget.SwipeRefreshLayout
 import com.example.myviewsapp.Country
 import com.example.myviewsapp.R
+import com.example.myviewsapp.view.common.ViewMvcFactory
 
-class CountriesListViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup?) :
+class CountriesListViewMvcImpl(
+    inflater: LayoutInflater,
+    parent: ViewGroup?,
+    viewMvcFactory: ViewMvcFactory
+) :
     BaseObservableViewMvc<CountriesListViewMvc.Listener>(), CountriesListViewMvc {
 
-    private inner class ItemEventsListener : CountriesItemViewMvc.Listener {
+    private inner class ItemEventsListener : CountryItemViewMvc.Listener {
         override fun onCountryClicked(country: Country) {
             getListeners().forEach { listener -> listener.onCountryClicked(country) }
         }
@@ -25,7 +30,8 @@ class CountriesListViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup?) :
     private var listErrorView: TextView
     private var listLoadingView: ProgressBar
 
-    private val countriesAdapter = CountryListAdapter(arrayListOf(), ItemEventsListener())
+    private val countriesAdapter =
+        CountryListAdapter(arrayListOf(), ItemEventsListener(), viewMvcFactory)
 
     init {
         setRootView(inflater.inflate(R.layout.activity_main, parent, false))

@@ -1,11 +1,11 @@
 package com.example.myviewsapp.view
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.widget.Toast
 import androidx.lifecycle.ViewModelProvider
 import com.example.myviewsapp.Country
-import com.example.myviewsapp.viewmodel.ListViewModel
+import com.example.myviewsapp.viewmodel.CountriesViewModel
+import com.example.myviewsapp.viewmodel.CountriesViewModelFactory
 
 class MainActivity : BaseActivity() {
 
@@ -25,7 +25,7 @@ class MainActivity : BaseActivity() {
 
     }
 
-    private lateinit var viewModel: ListViewModel
+    private lateinit var viewModel: CountriesViewModel
     private lateinit var countriesListViewMvc: CountriesListViewMvcImpl
 
     private val viewMvcEventsListener = ViewMvcEventsListener()
@@ -33,11 +33,14 @@ class MainActivity : BaseActivity() {
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
 
-        countriesListViewMvc = CountriesListViewMvcImpl(LayoutInflater.from(this), null)
+        countriesListViewMvc = getControllerCompositionRoot().getViewMvcFactory()
+            .getCountriesListViewMvc(null) as CountriesListViewMvcImpl
         countriesListViewMvc.registerListener(viewMvcEventsListener)
         setContentView(countriesListViewMvc.getRootView())
 
-        viewModel = ViewModelProvider(this)[ListViewModel::class.java]
+        val viewModelFactory =
+            CountriesViewModelFactory(getControllerCompositionRoot().getCountriesApi())
+        viewModel = ViewModelProvider(this, viewModelFactory)[CountriesViewModel::class.java]
         viewModel.refresh()
 
         observeViewModel()

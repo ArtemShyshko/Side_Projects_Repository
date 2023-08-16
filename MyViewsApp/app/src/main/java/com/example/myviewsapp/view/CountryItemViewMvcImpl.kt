@@ -10,7 +10,7 @@ import com.example.myviewsapp.util.getProgressDrawable
 import com.example.myviewsapp.util.loadImage
 
 class CountryItemViewMvcImpl(inflater: LayoutInflater, parent: ViewGroup?) :
-    BaseObservableViewMvc<CountriesItemViewMvc.Listener>(), CountriesItemViewMvc {
+    BaseObservableViewMvc<CountryItemViewMvc.Listener>(), CountryItemViewMvc {
 
     private var countryName: TextView
     private var capitalName: TextView
